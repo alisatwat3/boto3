@@ -59,3 +59,18 @@ class TestS3Customizations(BaseDocsFunctionalTests):
             ],
             self.get_nested_file_contents('s3', 'client', 'upload_file'),
         )
+
+    def test_put_bucket_replication_documents_filter_requirement(self):
+        contents = self.get_nested_file_contents(
+            's3', 'client', 'put_bucket_replication'
+        )
+        self.assert_contains_lines_in_order(
+            [
+                '**Prefix** *(string) --*',
+                '**Conditional requirement:** If you do not specify '
+                '``Filter``, you must specify ``Prefix``.',
+                'To include all objects in the bucket, specify an empty '
+                'string for ``Prefix``.',
+            ],
+            contents,
+        )

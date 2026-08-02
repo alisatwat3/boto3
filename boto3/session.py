@@ -515,6 +515,11 @@ class Session:
             ),
         )
         self._session.register(
+            'docs.request-params.s3.PutBucketReplication.complete-section',
+            boto3.utils.lazy_call('boto3.s3.inject.document_replication_rule'),
+            unique_id='s3-replication-rule-docs',
+        )
+        self._session.register(
             'creating-resource-class.s3.Bucket',
             boto3.utils.lazy_call('boto3.s3.inject.inject_bucket_methods'),
         )

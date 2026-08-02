@@ -52,6 +52,32 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
+_REPLICATION_RULE_FILTER_DOCUMENTATION = (
+    '**Conditional requirement:** If you do not specify ``Filter``, you '
+    'must specify ``Prefix``. To include all objects in the bucket, specify '
+    'an empty string for ``Prefix``.'
+)
+
+
+def document_replication_rule(section, **kwargs):
+    """Document the conditional filter requirement for replication rules."""
+    _append_replication_rule_documentation(section)
+
+
+def _append_replication_rule_documentation(section):
+    if section.context.get('shape') == 'ReplicationRule':
+        prefix = section.get_section('Prefix')
+        prefix.get_section('param-documentation').writeln(
+            _REPLICATION_RULE_FILTER_DOCUMENTATION
+        )
+        return
+
+    for section_name in section.available_sections:
+        _append_replication_rule_documentation(
+            section.get_section(section_name)
+        )
+
+
 def inject_s3_transfer_methods(class_attributes, **kwargs):
     utils.inject_attribute(class_attributes, 'upload_file', upload_file)
     utils.inject_attribute(class_attributes, 'download_file', download_file)
